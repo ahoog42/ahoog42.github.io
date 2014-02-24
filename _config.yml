@@ -1,0 +1,21 @@
+# Dependencies
+markdown:         redcarpet
+pygments:         true
+
+# Permalinks
+#permalink:        pretty
+permalink:        /blog/:year/:month/:title/
+
+# Setup
+title:            andrewhoog.com
+tagline:          'CEO/Co-founder of viaForensics'
+description:      'Thoughts on mobile security, forensics and running a  company'
+url:              http://andrewhoog.com
+
+author:
+  name:           'Andrew Hoog'
+  twitterurl:     https://twitter.com/ahoog42
+  twitterhandle:  ahoog42
+  githuburl:      https://github.com/ahoog42
+
+paginate:         4
