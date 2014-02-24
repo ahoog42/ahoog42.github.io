@@ -7,7 +7,7 @@ pygments:         true
 permalink:        /blog/:year/:month/:title/
 
 # Setup
-title:            andrewhoog.com
+title:            Andrew Hoog 
 tagline:          'CEO/Co-founder of viaForensics'
 description:      'Thoughts on mobile security, forensics and running a  company'
 url:              http://andrewhoog.com
