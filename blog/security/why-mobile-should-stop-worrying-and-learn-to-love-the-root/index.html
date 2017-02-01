@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Don&#x27;t Panic - the personal website of Andrew Hoog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Andrew Hoog&#x27;s blog on mobile security, forensics, programming and photography">
+    <meta name="author" content="Andrew Hoog">
+    <link rel="icon" href="../../favicon.ico">
+    
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/blog.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link active" href="/">Blog</a>
+          <a class="nav-link " href="/tools/">Tools</a>
+          <a class="nav-link " href="/talks/">Talks</a>
+          <a class="nav-link " href="/photography/">Photography</a>
+          <a class="nav-link " href="/about/">About</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="blog-header">
+      <div class="container">
+        <h2 class="blog-title">Don&#x27;t Panic</h2>
+        <p class="lead blog-description">Andrew Hoog&#x27;s blog on mobile security, forensics, programming and photography</p>
+      </div>
+    </div>
+
+    <div class="container">
+
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h3 class="blog-post-title">Why Mobile Should Stop Worrying and Learn to Love the Root</h3>
+            <p class="blog-post-meta">Post on Saturday, March 29th 2014</p>
+            <p>One of my talks at RSA 2014 tried to convince attendees that they <a href="https://viaforensics.com/articles-presentations/mobile-stop-worrying-learn-love-root-slides-pdf.html">shouldn&#39;t fear root on mobile</a>.  The talk, while lightly attended, seemed well received.  Max Eddy of PCMag did a nice write up on it entitled <a href="http://securitywatch.pcmag.com/mobile-security/321227-phones-can-t-be-trusted-security-needs-root-in-mobile">Phones Can&#39;t Be Trusted, Security Needs Root in Mobile</a>.</p>
+<h2 id="abbreviated-history-of-root-access">Abbreviated &quot;history&quot; of root access</h2>
+<p>It&#39;s funny if you think about the history of privilege on computer systems (this is a broad generalization of computer history).  In the early days, everyone had full access.  This was mostly academia or researchers so the focus was on sharing (check out Steven Levy&#39;s <a href="http://en.wikipedia.org/wiki/Hackers:_Heroes_of_the_Computer_Revolution">Hackers: Heroes of the Computer Revolution</a> if you&#39;re looking for a great read on the topic).  Over time, restricting user access and addressing security issues became a major focus.  Interestingly, though, when modern smart phones hit the market (of the iOS and Android variants), root access was revoked.  We were all so enamored with these new shiny things that we didn&#39;t pause and say, &quot;Hey, I&#39;m not so sure I&#39;m OK with this!&quot;.</p>
+<h2 id="motivations-for-restricting-root-access">Motivations for restricting root access</h2>
+<p>So, the obvious question is, &quot;Why do modern smart phones restrict root access?&quot; Well, this is conjecture, but here are a few ideas I&#39;ve heard or made up:</p>
+<ol>
+<li>Bloatware - making it hard to remove OS, OEM and Carrier app bloat</li>
+<li>Quality assurance - make sure phone works (arguably one of the less used features these days)</li>
+<li>Carrier lock in</li>
+<li>Forcing App Store model - walled garden lock in</li>
+</ol>
+<p>The most common reason I hear from industry insiders is #2. However, most informed consumers believe it&#39;s #1, #3 or #4.  Anyway, maybe you have other ideas...<a href="https://twitter.com/ahoog42">please feel free to share</a>.</p>
+<p>Regardless of the reason, it&#39;s no secret that people often can gain root privilege on mobile devices.</p>
+<h2 id="downsides-of-restricting-root">Downsides of restricting root</h2>
+<p>There are some big downsides to restricting root access:</p>
+<ul>
+<li>Enormously valuable engineering cycles are wasted on the cat and mouse game of gaining root on mobile devices.  Think of the brilliant things some of the top names in this game might come up with if they were focused on exploring new ideas, building new utilities and apps.</li>
+<li>&quot;Cyber criminals&quot; can gain root privilege, thus tipping the balance. Everyday consumers rarely root their devices and they cannot install software to monitor such things. If there is a 0-day for their device and they are targeted, advantage simply goes to the adversary.</li>
+<li>Mobile operating systems (and especially mobile apps) have security issues. This happens often and many times the issues are quite serious.  With no privilege on the device, there&#39;s nothing we can do but carry on.</li>
+<li>The entire security industry is locked out from developing solutions that might address some of these issues.  That&#39;s the great thing about a market economy.  Even if only a limited number of people really care about mobile security, it&#39;s still probably enough to support innovative companies and research.  Apple and Google might not jump down the various rabbit holes since they are focused on the needs of a billion users, but security researchers can solve problems for a much more niche need.</li>
+</ul>
+<h2 id="stop-your-bellyaching-what-do-you-want-man-">Stop your bellyaching (what do you want, man!?)</h2>
+<p>So, here&#39;s what I&#39;d love to see:</p>
+<ol>
+<li>Apple Developer phone - I&#39;ll pay double, even move.  Just let the industry have a device so we can tinker, make the platform and apps more secure.  Props to Google/Android for doing this from day one.</li>
+<li>Security vendor program - I guess this is similar to MDM APIs, but allow security vendors to gain additional privilege on devices if the enterprise/consumer approves.  Make the vetting process significant.  But allow security vendors the ability to secure mobile platforms in ways that Google and Apple might overlook or pass on.</li>
+<li>A process by which an organization (generally a large one) can sign and deploy their own operating system.  This is likely an Android-only thing and both Samsung and LG seem to be headed in this direction.  The idea is sufficiently large organizations might choose to push their own AOSP image to devices.  It would allow them to patch quickly instead of relying on the failed carrier strategy.  Again, this is not for the faint of heart but I know some large organizations are interested in this.</li>
+</ol>
+<p>In the end, I don&#39;t trust Apple, Google or anyone exclusively with mobile security.  The reality is security is hard and the current mobile industry is not incentivized to develop secure systems.  By locking everyone else out of root access, we&#39;ve given all the advantage to adversaries with little chance for the security industry to innovate and address these problems.</p>
+<p>I&#39;m hopeful for a more secure future.</p>
+
+          </div><!-- /.blog-post -->
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 offset-sm-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <p>I like to tinker in mobile forensics, security, malware analysis and incident response. I'm an author, inventor, expert witness and co-founder of NowSecure.</p>
+          </div>
+
+                    <div class="sidebar-module">
+                      <h4>Categories</h4>
+                      <ol class="list-unstyled">
+                        <li><a href="/category/security/">security </a> (2) </li>
+                        <li><a href="/category/self/">self </a> (1) </li>
+                        <li><a href="/category/tips/">tips </a> (1) </li>
+                      </ol>
+                    </div>
+          
+
+          <div class="sidebar-module">
+            <h4>Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="https://github.com/ahoog42/">GitHub</a></li>
+              <li><a href="https://twitter.com/ahoog42">Twitter</a></li>
+              <li><a href="https://www.instagram.com/ahoog42/">Instagram</a></li>
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>Edits welcome, issue PR to my <a href="https://github.com/ahoog42/andrewhoog.com">repo</a></p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
