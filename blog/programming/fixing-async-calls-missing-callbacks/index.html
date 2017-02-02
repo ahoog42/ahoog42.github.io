@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Don&#x27;t Panic - the personal website of Andrew Hoog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Andrew Hoog&#x27;s blog on mobile security, forensics, programming and photography">
+    <meta name="author" content="Andrew Hoog">
+    <link rel="icon" href="../../favicon.ico">
+    
+
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/blog.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link active" href="/">Blog</a>
+          <a class="nav-link " href="/tools/">Tools</a>
+          <a class="nav-link " href="/talks/">Talks</a>
+          <a class="nav-link " href="/photography/">Photography</a>
+          <a class="nav-link " href="/about/">About</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="blog-header">
+      <div class="container">
+        <h2 class="blog-title">Don&#x27;t Panic</h2>
+        <p class="lead blog-description">Andrew Hoog&#x27;s blog on mobile security, forensics, programming and photography</p>
+      </div>
+    </div>
+
+    <div class="container">
+
+
+      <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+          <div class="blog-post">
+            <h3 class="blog-post-title">Fixing async calls missing callbacks</h3>
+            <p class="blog-post-meta">Post on Wednesday, February 1st 2017</p>
+            <p>I recently updated to the latest stable version of node (v7.5.0) with the following command:</p>
+<p><code>nvm install stable --reinstall-packages-from=node</code></p>
+<p>and when I ran my ios-triage cli app, I saw several DeprecationWarning messages:</p>
+<p><code>(node:3958) DeprecationWarning: Calling an asynchronous function without callback is deprecated.</code></p>
+<p>Initially I was pretty excited because I recently taught myself node and as a noob I knew I was missing some callbacks which was preventing my async.parallel final function to not run. But the warning wasn&#39;t sufficiently verbose as I needed to know where I was missing the callback.</p>
+<h2 id="tracking-down-the-issue">Tracking down the issue</h2>
+<p>After a quick google, I discovered you can actually call node with the <code>--trace-deprecation</code> flag which will supply the stacktrace enabling easier debugging. While this is <a href="https://nodejs.org/api/cli.html">well documented</a>, I didn&#39;t even know what to search for however Google quickly landed me on this <a href="http://stackoverflow.com/questions/41462167/deprecationwarning-calling-an-asynchronous-function-without-callback-is-depreca">stackoverflow question</a>. Below you can see how that helped me quickly pinpoint the cause of error:</p>
+<pre><code class="hljs">$ node --trace-deprecation index.js 
+<span class="hljs-number">9</span>:<span class="hljs-number">40</span>:<span class="hljs-number">20</span> AM - <span class="hljs-string">info:</span> processed app data
+<span class="hljs-number">9</span>:<span class="hljs-number">40</span>:<span class="hljs-number">20</span> AM - <span class="hljs-string">info:</span> backup files processed and written to disk
+(<span class="hljs-string">node:</span><span class="hljs-number">3983</span>) <span class="hljs-string">DeprecationWarning:</span> Calling an asynchronous function without callback is deprecated.
+    at maybeCallback (fs.<span class="hljs-string">js:</span><span class="hljs-number">96</span>:<span class="hljs-number">42</span>)
+    at Object.fs.writeFile (fs.<span class="hljs-string">js:</span><span class="hljs-number">1192</span>:<span class="hljs-number">14</span>)
+    at <span class="hljs-regexp">/Users/</span>hiro<span class="hljs-regexp">/git/</span>ios-triage/index.<span class="hljs-string">js:</span><span class="hljs-number">623</span>:<span class="hljs-number">8</span>
+    at <span class="hljs-regexp">/Users/</span>hiro<span class="hljs-regexp">/git/</span>ios-triage<span class="hljs-regexp">/node_modules/</span>async<span class="hljs-regexp">/dist/</span>async.<span class="hljs-string">js:</span><span class="hljs-number">3694</span>:<span class="hljs-number">9</span>
+    at <span class="hljs-regexp">/Users/</span>hiro<span class="hljs-regexp">/git/</span>ios-triage<span class="hljs-regexp">/node_modules/</span>async<span class="hljs-regexp">/dist/</span>async.<span class="hljs-string">js:</span><span class="hljs-number">356</span>:<span class="hljs-number">16</span>
+    at replenish (<span class="hljs-regexp">/Users/</span>hiro<span class="hljs-regexp">/git/</span>ios-triage<span class="hljs-regexp">/node_modules/</span>async<span class="hljs-regexp">/dist/</span>async.<span class="hljs-string">js:</span><span class="hljs-number">877</span>:<span class="hljs-number">25</span>)
+    at iterateeCallback (<span class="hljs-regexp">/Users/</span>hiro<span class="hljs-regexp">/git/</span>ios-triage<span class="hljs-regexp">/node_modules/</span>async<span class="hljs-regexp">/dist/</span>async.<span class="hljs-string">js:</span><span class="hljs-number">867</span>:<span class="hljs-number">17</span>)
+    at <span class="hljs-regexp">/Users/</span>hiro<span class="hljs-regexp">/git/</span>ios-triage<span class="hljs-regexp">/node_modules/</span>async<span class="hljs-regexp">/dist/</span>async.<span class="hljs-string">js:</span><span class="hljs-number">840</span>:<span class="hljs-number">16</span>
+    at <span class="hljs-regexp">/Users/</span>hiro<span class="hljs-regexp">/git/</span>ios-triage<span class="hljs-regexp">/node_modules/</span>async<span class="hljs-regexp">/dist/</span>async.<span class="hljs-string">js:</span><span class="hljs-number">3691</span>:<span class="hljs-number">13</span>
+    at apply (<span class="hljs-regexp">/Users/</span>hiro<span class="hljs-regexp">/git/</span>ios-triage<span class="hljs-regexp">/node_modules/</span>async<span class="hljs-regexp">/dist/</span>async.<span class="hljs-string">js:</span><span class="hljs-number">21</span>:<span class="hljs-number">25</span>)</code></pre>
+
+<h2 id="error-code-and-fix">Error code and fix</h2>
+<p>From there, things were pretty simple. In the first few days of getting my mind wrapped around async programming (my first language besides Basic was Pascal and then primarily python), I had even noted in my code that I might need to handle the callback since I wasn&#39;t calling fs.writeFileSync.</p>
+<p>This is my faulty code:</p>
+<pre><code class="hljs"><span class="hljs-comment">// FIXME should catch errors, maybe use callbacks?</span>
+fs.writeFile(path.<span class="hljs-keyword">join</span>(processedPath,<span class="hljs-string">'pprofiles.json'</span>), pprofilesJSON, <span class="hljs-string">'utf8'</span>);
+callback(<span class="hljs-literal">null</span>,<span class="hljs-string">"processed pprofiles"</span>);</code></pre>
+
+<p>and here&#39;s the simple fix which captures and handles the callback from writeFile (note: since I&#39;m using the excellent <a href="http://caolan.github.io/async/docs.html">async</a> library I choose not to callback with the error but simply note and handle it in my code):</p>
+<pre><code class="hljs"><span class="hljs-comment">// fixed</span>
+fs.writeFile(path.join(processedPath,<span class="hljs-string">'pprofiles.json'</span>), pprofilesJSON, <span class="hljs-string">'utf8'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(err)</span> </span>{
+  <span class="hljs-keyword">if</span> (err) {
+    logger.debug(<span class="hljs-string">"error writing pprofile data to disk with error: %s"</span>, err);
+    <span class="hljs-keyword">callback</span>(<span class="hljs-literal">null</span>, <span class="hljs-string">"error writing pprofile data to disk"</span>);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">callback</span>(<span class="hljs-literal">null</span>, <span class="hljs-string">"wrote pprofile data to disk"</span>);
+  }
+});</code></pre>
+
+
+          </div><!-- /.blog-post -->
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 offset-sm-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <p>I like to tinker in mobile forensics, security, malware analysis and incident response. I'm an author, inventor, expert witness and co-founder of NowSecure.</p>
+          </div>
+
+                    <div class="sidebar-module">
+                      <h4>Categories</h4>
+                      <ol class="list-unstyled">
+                        <li><a href="/category/programming/">programming </a> (1) </li>
+                        <li><a href="/category/security/">security </a> (2) </li>
+                        <li><a href="/category/self/">self </a> (1) </li>
+                        <li><a href="/category/tips/">tips </a> (1) </li>
+                      </ol>
+                    </div>
+          
+
+          <div class="sidebar-module">
+            <h4>Elsewhere</h4>
+            <ol class="list-unstyled">
+              <li><a href="https://github.com/ahoog42/">GitHub</a></li>
+              <li><a href="https://twitter.com/ahoog42">Twitter</a></li>
+              <li><a href="https://www.instagram.com/ahoog42/">Instagram</a></li>
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>Edits welcome, submit an issue or PR on <a href="https://github.com/ahoog42/ahoog42.github.io">GitHub</a></p>
+    </footer>
+
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-91349124-1', 'auto');
+      ga('send', 'pageview');
+    
+    </script>
+
+    <!-- highlights.js for code highlighting -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
